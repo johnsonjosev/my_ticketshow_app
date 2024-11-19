@@ -25,6 +25,16 @@
     text-align: justify;
 }
 
+.outer_box{
+    border: 1px solid orange;
+    margin-top: 10px;
+    margin:auto;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: justify;
+}
+
+
 .center{
     text-align: center;
     margin: auto;
