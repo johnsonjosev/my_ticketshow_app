@@ -16,7 +16,8 @@
 .input_form{
     border: 1px solid blue;
     width: 600px;
-    height: 500px;
+    height: 700px;
+    height: auto;
     margin:auto;
     margin-top:20px;
     padding: 10px;
@@ -39,4 +40,10 @@
     text-align: center;
     margin: auto;
     color: rgb(5,5,110);
+}
+
+.err_msg{
+    text-align: center;
+    margin: auto;
+    color: rgb(200,0,11);
 }
