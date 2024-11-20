@@ -1,0 +1,34 @@
+
+{%extends "admin_layout.html"%}
+{%block conten%}
+                <div class="center"> <h3>Add venue</h3> </div> 
+                <form action="/venue/{{name}}" method ="POST">
+                <div class="input_form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Theatre Name(E-Mail)</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="t name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Location</label>
+                        <input type="text" class="form-control" name="location"  id="location" placeholder="Apartment/City/State">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pincode" class="form-label">Pincode</label>
+                        <input type="text" class="form-control" name="pincode"  id="pincode" placeholder="1000010">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="capacity" class="form-label">Capacity</label>
+                        <input type="number" class="form-control" name="capacity"  id="capacity" placeholder="00">
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="/admin/{{name}}" type="button" class="btn btn-primary" > Cancel</a>
+                        <div class="center"> {{msg}}</div>
+                    </div>
+                    
+                </div>
+            </form>
+{%endblock%}
