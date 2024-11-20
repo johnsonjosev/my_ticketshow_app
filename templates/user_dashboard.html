@@ -1,34 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="/static/styles/main.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-        <title>User Dashboard</title>
-    </head>
-    <body>
-        <div class="my_container">
-            <div class="center"> <h1>My Ticket booking App</h1> </div> 
-            <div class="my_panel">
-                <nav class="navbar navbar-expand-lg navbar-light" style="background-color: aqua;">
-
-                    <div class="collapse navbar-collapse" id="navbarText">
-                      <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                          <a class="nav-link active" href="#">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link active" href="#">Bookings</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#">Logout</a>
-                        </li>
-                      </ul>
-                      <span class="navbar-text">
-                        Welcome  "User"
-                      </span>
-                    </div>
-                  </nav>  
+{%extends "user_layout.html"%}
+{%block conten%}
                   <!-- VENUE 1 STARTED-->
                 <div class="outer_box">   
                   Venue 1
@@ -54,15 +26,11 @@
                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                             <button type="button" class="btn btn-outline-primary">Book</button>
                           </div>
-                        </div>
-                          
+                        </div>                          
                       </div>
                     </div>
-                  </div>   
-                  
+                  </div>                  
                 </div>   
                 <!--End of Venue 1Card here-->      
-            </div>
-        </div>
-    </body>
-</html>
+{%endblock%}
+ 
