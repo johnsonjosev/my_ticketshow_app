@@ -2,6 +2,7 @@
 from flask import render_template,request,redirect,url_for
 from flask import current_app as app
 from .models import *
+from datetime import datetime
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -65,6 +66,25 @@ def add_venue(name):
         #return render_template("admin_dashboard.html",name= name,msg="Theatre Successfully Added")
 
     return render_template("add_venue.html",name=name)
+
+@app.route("/show/<v_id>/<name>",methods=["GET","POST"])
+def add_show(v_id,name):
+    if request.method == "POST":
+        sname = request.form.get('name')
+        tags = request.form.get('tags')
+        rating = request.form.get('rating')
+        tkt_price = request.form.get('tkt_price')
+        date_time = request.form.get('date_time')
+        date_time = datetime.strptime(date_time,"%Y-%m-%dT%H:%M")
+        theatre_id = request.form.get('theatre_id')
+        new_show = Show(name=sname,tags=tags,rating=rating,tkt_price=tkt_price,date_time=date_time,theatre_id=v_id)
+        db.session.add(new_show)
+        db.session.commit()
+        return redirect(url_for("admin_dashboard", name=name))
+        #return render_template("admin_dashboard.html",name= name,msg="Theatre Successfully Added")
+
+    return render_template("add_show.html",v_id=v_id,name=name)
+
 
 #other support functions
 

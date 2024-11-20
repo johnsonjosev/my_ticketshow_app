@@ -13,9 +13,10 @@
                             <h5 class="card-title">{{theatre.name}}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{theatre.location}}</h6>
                             {%if theatre.shows%}
+
                             <table>
                               <tr><th>ID</th><th>Name</th><th>Time</th></tr>
-                              {%for show in  theatres.shows%}
+                              {%for show in theatre.shows%}
                               <tr><td> {{show.id}}</td><td> {{show.name}}</td> <td> {{show.date_time}}</td></tr>
                               {%endfor%}
                             </table>
@@ -23,7 +24,7 @@
                             <h4> No shows here</h4>
                             {%endif%}
 
-                            <button type="button" class="btn btn-outline-primary">+Add Show</button>
+                            <a href="/show/{{theatre.id}}/{{name}}" type="button" class="btn btn-outline-primary">+Add Show</a>
                           </div>
                         </div>
                       </div>
