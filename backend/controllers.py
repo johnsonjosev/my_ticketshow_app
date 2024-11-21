@@ -100,9 +100,59 @@ def search(name):
             return redirect(url_for("admin_dashboard", name=name))        
     return redirect(url_for("admin_dashboard", name=name))
 
-    
+@app.route("/edit_venue/<id>/<name>",methods=["GET","POST"])
+def edit_venue(id,name):
+    v =get_venue(id)
+    if request.method == "POST":
+        vname = request.form.get('name')
+        location = request.form.get('location')
+        capacity = request.form.get('capacity')
+        pincode = request.form.get('pincode')
 
+        v.name = vname
+        v.location = location
+        v.capacity = capacity
+        v.pin_code = pincode
+        db.session.commit()
+        return redirect(url_for("admin_dashboard", name=name))
+    return render_template("edit_venue.html",venue=v,name=name)
+   
+@app.route("/delete_venue/<id>/<name>",methods=["GET","POST"])
+def delete_venue(id,name):
+    v =get_venue(id)
+    if v:
+        db.session.delete(v)
+        db.session.commit()
+    return redirect(url_for("admin_dashboard", name=name))
 
+@app.route("/edit_show/<id>/<name>",methods=["GET","POST"])
+def edit_show(id,name):
+    v =get_show(id)
+    if request.method == "POST":
+        sname = request.form.get('name')
+        tags = request.form.get('tags')
+        rating = request.form.get('rating')
+        tkt_price = request.form.get('tkt_price')
+        date_time = request.form.get('date_time')
+        date_time = datetime.strptime(date_time,"%Y-%m-%dT%H:%M")
+
+        v.name = sname    
+        v.tags = tags
+        v.rating = rating
+        v.tkt_price = tkt_price
+        v.date_time = date_time
+        db.session.commit()
+
+        return redirect(url_for("admin_dashboard", name=name))
+    return render_template("edit_show.html",show=v,name=name)
+   
+@app.route("/delete_show/<id>/<name>",methods=["GET","POST"])
+def delete_show(id,name):
+    s=get_show(id)
+    if s:
+        db.session.delete(s)
+        db.session.commit()
+    return redirect(url_for("admin_dashboard", name=name))
 
 #other support functions
 
@@ -117,5 +167,12 @@ def search_by_venue(search_txt):
 
 def search_by_loc(search_txt):
     theatres = Theatre.query.filter(Theatre.location.ilike(f"%{search_txt}%"))
-    
     return  theatres
+
+def get_venue(id):
+    theatre = Theatre.query.filter_by(id=id).first()
+    return theatre
+
+def get_show(id):
+    show = Show.query.filter_by(id=id).first()
+    return show
