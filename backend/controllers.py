@@ -86,8 +86,36 @@ def add_show(v_id,name):
     return render_template("add_show.html",v_id=v_id,name=name)
 
 
+@app.route("/search/<name>",methods=["GET","POST"])
+def search(name):
+    if request.method == "POST":
+        search_txt = request.form.get('search_txt')
+        by_venue = search_by_venue(search_txt)
+        by_loc = search_by_loc(search_txt)
+        if by_venue:
+            return render_template("admin_dashboard.html",name = name,theatres=by_venue) 
+        elif by_loc:
+            return render_template("admin_dashboard.html",name = name,theatres=by_loc)        
+        else:
+            return redirect(url_for("admin_dashboard", name=name))        
+    return redirect(url_for("admin_dashboard", name=name))
+
+    
+
+
+
 #other support functions
 
 def get_theatres():
     theatres = Theatre.query.all()
     return theatres
+
+
+def search_by_venue(search_txt):
+    theatres = Theatre.query.filter(Theatre.name.ilike(f"%{search_txt}%"))
+    return  theatres
+
+def search_by_loc(search_txt):
+    theatres = Theatre.query.filter(Theatre.location.ilike(f"%{search_txt}%"))
+    
+    return  theatres
