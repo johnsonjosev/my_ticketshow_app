@@ -1,36 +1,36 @@
 
 {%extends "user_layout.html"%}
 {%block conten%}
-                  <!-- VENUE 1 STARTED-->
-                <div class="outer_box">   
-                  Venue 1
-                  <div class="container">
-                    <div class ="row">
-                      <div class="col">
-                        <!--Show Card here-->
-                        <div class="card" style="width: 18rem;">
-                          <div class="card-body">
-                            <h5 class="card-title">Show 1</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Action Movie</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <button type="button" class="btn btn-outline-primary">Book</button>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col">
-                         <!--Show Card here-->
-                         <div class="card" style="width: 18rem;">
-                          <div class="card-body">
-                            <h5 class="card-title">Show 2</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Horrer Movie</h6>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <button type="button" class="btn btn-outline-primary">Book</button>
-                          </div>
-                        </div>                          
-                      </div>
-                    </div>
-                  </div>                  
-                </div>   
+  {%if theatres%}
+   {%for theatre in theatres%}     
+      <!-- VENUE 1 STARTED-->
+    <div class="outer_box">   
+      {{theatre.name}}
+      <div class="container">
+        <div class ="row">
+          {%for show in theatre.shows%} 
+          {%if show.date_time>=dt_time_now%}
+          <div class="col">
+            <!--Show Card here-->
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">{{show.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{show.tags}},Show Time: {{show.date_time}}</h6>                        
+                <a href="/book_ticket/{{uid}}/{{show.id}}/{{name}}" type="button" class="btn btn-outline-primary">Book</a>
+              </div>
+            </div>
+          </div>
+          {%endif%}
+          {%endfor%}
+
+        </div>
+      </div>                  
+    </div>   
+  {%endfor%}
+            
+    {%else%}
+      <h3 class="center"> No Shows Available in any theatres</h3>
+      {%endif%}
                 <!--End of Venue 1Card here-->      
 {%endblock%}
  

@@ -3,6 +3,7 @@ from flask import render_template,request,redirect,url_for
 from flask import current_app as app
 from .models import *
 from datetime import datetime
+from sqlalchemy import func
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -14,9 +15,12 @@ def admin_dashboard(name):
     return render_template("admin_dashboard.html",name = name,theatres=theathres) 
 
 # common route for user dashboard
-@app.route("/user/<name>")
-def user_dashboard(name):
-    return render_template("user_dashboard.html",name = name) 
+@app.route("/user/<id>/<name>")
+def user_dashboard(id,name):
+    theathres = get_theatres()
+    dt_time_now=datetime.today().strftime("%Y-%m-%dT%H:%M")
+    dt_time_now=datetime.strptime(dt_time_now,"%Y-%m-%dT%H:%M")
+    return render_template("user_dashboard.html", dt_time_now=dt_time_now,uid=id,name = name,theatres=theathres) 
 
 @app.route("/login",methods=["GET","POST"])
 def signin():
@@ -28,7 +32,7 @@ def signin():
         if usr and usr.role==0:
             return redirect(url_for("admin_dashboard", name=uname))
         elif usr and usr.role==1:
-            return redirect(url_for("user_dashboard", name=uname))
+            return redirect(url_for("user_dashboard", name=uname,id= usr.id))
         else:
             return render_template("login.html",msg= "Invalid User Credentials")
     return render_template("login.html",msg="")
@@ -153,6 +157,34 @@ def delete_show(id,name):
         db.session.delete(s)
         db.session.commit()
     return redirect(url_for("admin_dashboard", name=name))
+
+@app.route("/book_ticket/<uid>/<sid>/<name>",methods=["GET","POST"])
+def book_ticket(uid,sid,name):
+    if request.method == "POST":
+        no_tickets = request.form.get('no_tickets')
+        new_ticket = Ticket(no_of_tickets = no_tickets,sl_nos=" ",user_id=uid,show_id=sid)
+        db.session.add(new_ticket)
+        db.session.commit()
+        return redirect(url_for("user_dashboard",id=uid, name=name))
+    
+    # Get methods
+    show = Show.query.filter_by(id=sid).first()
+    theatre = Theatre.query.filter_by(id = show.theatre_id).first()
+    available_seats = theatre.capacity
+
+    #booked_tickets by aggregate function sum
+
+    book_tickets = Ticket.query.with_entities(func.sum(Ticket.no_of_tickets)).group_by(Ticket.show_id).filter_by(show_id=sid).first()
+    book_ticket
+    if book_tickets:
+        available_seats -=book_tickets[0]
+    return render_template("book_ticket.html",uid=uid,sid=sid,name=name,tname=theatre.name,sname=show.name,available_seats=available_seats,tkt_price=show.tkt_price)
+
+
+
+    
+
+
 
 #other support functions
 
