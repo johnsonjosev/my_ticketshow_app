@@ -4,6 +4,9 @@ from flask import current_app as app
 from .models import *
 from datetime import datetime
 from sqlalchemy import func
+from werkzeug.utils import secure_filename 
+import os
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -63,7 +66,13 @@ def add_venue(name):
         location = request.form.get('location')
         capacity = request.form.get('capacity')
         pincode = request.form.get('pincode')
-        new_theatre = Theatre(name=vname,location=location,pin_code=pincode,capacity=capacity)
+        file = request.files["file-upload"]
+        if file.filename:
+            file_name=secure_filename(file.filename) #verification of the file is done
+   
+            venue_pic_url= './uploaded_files/'+vname +"_" + file_name
+            file.save(venue_pic_url)
+        new_theatre = Theatre(name=vname,location=location,pin_code=pincode,capacity=capacity,venue_pic_url=venue_pic_url)
         db.session.add(new_theatre)
         db.session.commit()
         return redirect(url_for("admin_dashboard", name=name))
