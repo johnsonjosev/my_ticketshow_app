@@ -6,6 +6,8 @@ from datetime import datetime
 from sqlalchemy import func
 from werkzeug.utils import secure_filename 
 import os
+import matplotlib.pyplot as plt
+
 
 @app.route("/")
 def home():
@@ -98,7 +100,6 @@ def add_show(v_id,name):
 
     return render_template("add_show.html",v_id=v_id,name=name)
 
-
 @app.route("/search/<name>",methods=["GET","POST"])
 def search(name):
     if request.method == "POST":
@@ -189,9 +190,13 @@ def book_ticket(uid,sid,name):
         available_seats -=book_tickets[0]
     return render_template("book_ticket.html",uid=uid,sid=sid,name=name,tname=theatre.name,sname=show.name,available_seats=available_seats,tkt_price=show.tkt_price)
 
+@app.route("/admin_summary/<name>")
+def admin_summary(name):  
+    plot =get_theatres_summary()
+    plot.savefig("./static/images/theatre_summary.jpeg")
+    plot.clf
+    return render_template("admin_summary.html",name=name)
 
-
-    
 
 
 
@@ -217,3 +222,16 @@ def get_venue(id):
 def get_show(id):
     show = Show.query.filter_by(id=id).first()
     return show
+
+def get_theatres_summary():
+    theatres = get_theatres()
+    summary={}
+    for t in theatres:
+        summary[t.name] = t.capacity
+    x_names=list(summary.keys())
+    y_cap= list(summary.values())
+    plt.bar(x_names,y_cap, color="blue",width=0.4)
+    plt.title("Theatres vs Capacity")
+    plt.xlabel("Theatre")
+    plt.ylabel("Capacity")
+    return plt
