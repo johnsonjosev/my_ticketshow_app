@@ -1,5 +1,7 @@
 from flask import Flask
 from backend.models import db
+from backend.api_controllers import *
+
 app = None
 
 def setup_app():
@@ -7,6 +9,7 @@ def setup_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ticket_show2.sqlite3" 
     # Implement sqlite connection
     db.init_app(app) # Flask app is connected to DB
+    api.init_app(app) # Flask app connected to APIs
     app.debug =True
     app.app_context().push() # Direct access to other modules
     print(" Ticket Show is started...")
